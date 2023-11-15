@@ -1,180 +1,130 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="description" content="Мгновенная проверка ударения в словах">
-        <meta name="keywords" content="ударение, в слове, проверить, куда падает, ударная глассная">
+        <meta name="description" content="Быстро находит нужную форму глагола в английском">
+        <meta name="keydictionarys" content="английский, глаголы">
         <meta name="viewport" content="width=device-width, initial-scale=0.8">
-        <meta name="google-site-verification" content="CRmi3dKtSAMtwc7pJBpp5Sz2ySkBRFORnTH-PnLMBxs" />
-            <title>ударе́ние</title>
+            <title>Формы глаголов</title>
             <link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic ' rel='stylesheet' type='text/css'>
                 
                 <style>
                     * {
                         margin: 0;
                         padding: 0;
+                        font-variant-ligatures: none;
                     }
                 
-                html,
-                body
-                {
-                    height: 100%;
-                    font-family: 'Roboto'; /* гарнитура текста */
-                    font-size: 150%;
-                }
-                
-                div.wrapper
-                {
-                    position: relative;
-                    min-height: 100%;
-                }
-                
-                input
-                {
-                    color: #0b494b;
-                    font-family: 'Roboto'; /* Гарнитура текста */
-                    font-size: 200%; /* Размер шрифта в процентах */
-                    outline: none; /* убираем стандартный стиль поля ввода */
-                    border: none;
-                    border-radius: 5px;
-                    padding: 10px 20px 20px;
-                    background: #d0f9f5;
-                    background: linear-gradient(to top, #e3fcff, #c8f8f0);
-                   -webkit-box-sizing: border-box;
-                   -moz-box-sizing: border-box;
-                    box-sizing: border-box;
-                    width: 100%;
-                    /*width: calc(100% - 40px);/*высчитанная ширина*/
-                }
-                
-                input:focus
-                {
-                    background: white;
-                }
-                
-                div#output
-                {
-                    line-height:1.4;
-                    font-weight: 300;
-                    padding: 23px;
-                    color: #1c7c82;
-                }
-                
-                i
-                {
-                    color: #999;
-                    font-size: 50%;
-                }
-                
-                .content {
-                    padding-top: 35px;
-                    padding-bottom: 90px;
-                    margin:0px 20px;
-                }
-                .footer {
-                    font-weight: 300;
-                    position: absolute;
-                    left: 0;
-                    bottom: 0;
-                    padding: 20px 30px;
-                    color: #aaa;
-                    font-size: 40%;
-                }
+                    html,
+                    body
+                    {
+                        height: 100%;
+                        font-family: 'Roboto'; /* гарнитура текста */
+                        font-size: 150%;
+                    }
+                    
+                    div.wrapper
+                    {
+                        position: relative;
+                        min-height: 100%;
+                    }
+                    
+                    input
+                    {
+                        color: #0b494b;
+                        font-family: 'Roboto'; /* Гарнитура текста */
+                        font-size: 200%; /* Размер шрифта в процентах */
+                        outline: none; /* убираем стандартный стиль поля ввода */
+                        border: none;
+                        border-radius: 5px;
+                        padding: 10px 20px 20px;
+                        background: #d0f9f5;
+                        background: linear-gradient(to top, #e3fcff, #c8f8f0);
+                       -webkit-box-sizing: border-box;
+                       -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                        width: 100%;
+                        /*width: calc(100% - 40px);/*высчитанная ширина*/
+                    }
+                    
+                    
+                    div#output
+                    {
+                        line-height:1.4;
+                        font-weight: 300;
+                        padding: 23px;
+                        color: #1c7c82;
+                    }
+                    
+                    i
+                    {
+                        color: #999;
+                        font-size: 50%;
+                    }
+                    
+                    .content {
+                        padding-top: 35px;
+                        padding-bottom: 90px;
+                        margin:0px 20px;
+                    }
+                    .footer {
+                        font-weight: 300;
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        padding: 20px 30px;
+                        color: #aaa;
+                        font-size: 40%;
+                    }
                 </style>
 
 <script src="words.js"></script>
 
-<script>
-function readurl()
-{
-    var url = decodeURIComponent(document.URL).split("#");
-    
-    if(url.length > 1)
-    {
-        search.value = url[1];
-        read(search.value);
-    }
-    else placeholder();
-}
+        <script>
+            function read(query)
+            {
+                search.placeholder = "";
+                output.innerHTML = "";
 
-function read(query)
-{
+                //query = query.replace(/[^a-z ]/ig, ""); //убираем из запроса не латиницу
+                //if (search.value[0] == " ") search.value = search.value.replace(/^\s?\s+/,""); //убираем из поля ввода пробелы в начале строки, чтобы не скрывался плейсхолдер
+                //window.location = "#" + query;
 
-    search.placeholder = "";
-    output.innerHTML = "";
-    
-    
-    query = query.replace(/^[^А-Яа-яёЁё]?[^А-Яа-яёЁё]+/,""); //убираем из запроса не кириллицу
-    if (search.value[0] == " ") search.value = search.value.replace(/^\s?\s+/,""); //убираем из поля ввода пробелы в начале строки, чтобы не скрывался плейсхолдер
-    window.location = "#" + query;
-    if (query !== "") //если что-то осталось
-    {
-        lower_query = query.toLowerCase();
-        for (i = 0; i < word.length; i++)
-        {
-                //console.log("i = "+i);
-                //console.log(word[i][0]);
-            if (word[i][0].indexOf(lower_query) == 0 ) output.innerHTML += word[i][1]+"<br>"; //если входит с первой буквы — вывод слова с ударением
-        }
-    }
-    if(search.value == "") placeholder();
-}
-    
+                if (query !== "") //если что-то осталось
+                {
+                    lower_query = query.toLowerCase();
+                    console.log(lower_query);
+                    for (i = 0; i < dictionary.length; i++)
+                    {
+                            //console.log("i = "+i);
+                            //console.log(dictionary[i][0]);
+                        if (dictionary[i][0].indexOf(lower_query) == 0 || dictionary[i][1].indexOf(lower_query) == 0 || dictionary[i][2].indexOf(lower_query) == 0) {
+                        output.innerHTML += dictionary[i][0]+", "+dictionary[i][1]+", "+dictionary[i][2]+"<br>"; 
+                        //если входит с первой буквы — вывод слова с ударением
+
+                        }
+                    }
+                }
+                if(search.value == "") placeholder();
+            }
                 
-function placeholder()
-{
-    a = Math.round(Math.random()*word.length);
-    search.placeholder = word[a][1].split(' <')[0];
-}
-                </script>
-                <!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function (d, w, c) {
-        (w[c] = w[c] || []).push(function() {
-            try {
-                w.yaCounter33310773 = new Ya.Metrika({
-                    id:33310773,
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true,
-                    webvisor:true
-                });
-            } catch(e) { }
-        });
+                            
+            function placeholder()
+            {
+                a = Math.round(Math.random()*dictionary.length);
+                search.placeholder = dictionary[a][0].split(' <')[0];
+            }
+        </script>
 
-        var n = d.getElementsByTagName("script")[0],
-            s = d.createElement("script"),
-            f = function () { n.parentNode.insertBefore(s, n); };
-        s.type = "text/javascript";
-        s.async = true;
-        s.src = "https://mc.yandex.ru/metrika/watch.js";
-
-        if (w.opera == "[object Opera]") {
-            d.addEventListener("DOMContentLoaded", f, false);
-        } else { f(); }
-    })(document, window, "yandex_metrika_callbacks");
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/33310773" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-                <script>
-                    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-                     
-                     ga('create', 'UA-65619217-1', 'auto');
-                     ga('send', 'pageview');
-                     
-                    </script>
-                </head>
+    </head>
     
-    <body onload="readurl()">
+    <body">
         <div class="wrapper">
                 <div class="content">
                     <input autofocus id="search" autocomplete="off" value="" onkeyup="read(this.value)">
                     <div id="output"></div>
                 </div>
                 <div class="footer">
-                    © Константин Уланов, 2015—2016
+                    © Константин Уланов, 2023
                 </div>
         </div>
     </body>
